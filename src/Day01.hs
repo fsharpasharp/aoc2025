@@ -21,6 +21,7 @@ passedZeros a (L b)
     | otherwise = 1 + (b-a) `div` dial
 passedZeros a (R b) = (a+b) `div` dial
 
+day01 :: IO (Int, Int)
 day01 = do
     rotations <- fmap parseRotation . lines <$> readFile "data/day01.in"
     let states = scanl rotate 50 rotations

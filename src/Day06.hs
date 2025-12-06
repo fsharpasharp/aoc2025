@@ -2,6 +2,7 @@ module Day06 (day06) where
 
 import Data.Char (isDigit)
 import Data.List (transpose)
+import Data.List.NonEmpty (NonEmpty((:|)), toList)
 import Data.Text (lines, pack, unpack)
 import Data.Text.IO (readFile)
 import Solution (Parser, integer, parseOrDie)
@@ -43,10 +44,9 @@ operations = some $ (oph Sum '+' <|> oph Product '*') <* space
     oph :: Operation -> Char -> Parser Operation
     oph op c = op <$ char c
 
-walk :: [[Integer]] -> Maybe Integer -> [[Integer]]
-walk (x : xs) (Just y) = (y : x) : xs
-walk xs Nothing = [] : xs
-walk _ _ = error "Oh no"
+walk :: NonEmpty [Integer] -> Maybe Integer -> NonEmpty [Integer]
+walk (x :| xs) (Just y) = (y : x) :| xs
+walk (x :| xs) Nothing = [] :| x : xs
 
 day06 :: IO [Integer]
 day06 = do
@@ -54,7 +54,7 @@ day06 = do
 
   let matrix = transpose . fmap (parseOrDie nums) . init $ text
       ops = parseOrDie operations . last $ text
-      wrap = reverse . foldl walk [[]]
+      wrap = reverse . toList . foldl walk ([]:|[])
       verticalNums = wrap . fmap (parseOrDie numOrSep . pack) . transpose . fmap unpack $ text
 
   return ([sum . zipWith runOperation ops] <*> [matrix, verticalNums])

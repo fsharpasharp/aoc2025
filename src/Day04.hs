@@ -1,6 +1,13 @@
 module Day04 (day04) where
 
 import Data.Array.IArray
+  ( Array,
+    IArray (bounds),
+    Ix (range),
+    listArray,
+    (!?),
+    (//),
+  )
 
 type Grid a = Array (Int, Int) a
 
@@ -32,8 +39,6 @@ fixRoll g = go g 0
       case rolls grid of
         [] -> acc
         update -> go (grid // update) (acc + length update)
-
---- >>> day04
 
 day04 :: IO (Int, Int)
 day04 = do
