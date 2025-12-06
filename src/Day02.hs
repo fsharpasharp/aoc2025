@@ -1,7 +1,7 @@
 module Day02 where
 
 import Data.Text.IO (readFile)
-import Solution
+import Solution (Parser, integer, parseOrDie)
 import Text.Megaparsec (many, optional, some)
 import Text.Megaparsec.Char (char, spaceChar)
 import Prelude hiding (readFile)
@@ -35,6 +35,7 @@ repeating x = any isPeriodic [1 .. len `div` 2]
 numsInRange :: Range -> [Integer]
 numsInRange (Range lower upper) = [lower .. upper]
 
+day02 :: IO [Integer]
 day02 = do
   rs <- parseOrDie ranges <$> readFile "data/day02.in"
   return [sum . concatMap (filter f . numsInRange) $ rs | f <- [repeatingOnce, repeating]]
