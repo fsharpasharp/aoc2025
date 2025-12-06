@@ -1,0 +1,44 @@
+cabal-version:      3.0
+name:               aoc2025haskell
+version:            0.1.0.0
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             fsharpasharp
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+
+common warnings
+    ghc-options: -Wall
+
+library
+    import:           warnings
+    exposed-modules:  
+        Day01,
+        Day02,
+        Day03,
+        Day04,
+        Day05,
+        Day06,
+        Solution
+
+    build-depends:    
+        base ^>=4.18.3.0,
+        megaparsec,
+        text,
+        containers,
+        array,
+        hlint,
+        mtl
+
+    hs-source-dirs:   src
+
+    default-language: Haskell2010
+
+executable aoc2025haskell
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:
+        base ^>=4.18.3.0,
+        aoc2025haskell
+    hs-source-dirs:   app
+    default-language: Haskell2010
