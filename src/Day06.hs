@@ -30,7 +30,7 @@ numOrSep = do
       skipNonDigit
       x <- integer
       skipNonDigit
-      return x
+      pure x
 
 data Operation = Sum | Product deriving (Show)
 
@@ -57,4 +57,4 @@ day06 = do
       wrap = reverse . toList . foldl walk ([] :| [])
       verticalNums = wrap . fmap (parseOrDie numOrSep . pack) . transpose . fmap unpack $ text
 
-  return ([sum . zipWith runOperation ops] <*> [matrix, verticalNums])
+  pure ([sum . zipWith runOperation ops] <*> [matrix, verticalNums])

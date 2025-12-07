@@ -43,4 +43,4 @@ fixRoll g = go g 0
 day04 :: IO (Int, Int)
 day04 = do
   g <- fromLines . lines <$> readFile "data/day04.in"
-  return (length . rolls $ g, fixRoll g)
+  pure (length . rolls $ g, fixRoll g)

@@ -15,7 +15,7 @@ nBatteries = go
 day03 :: IO [Int]
 day03 = do
   ns <- fmap (fmap digitToInt) . lines <$> readFile "data/day03.in"
-  return
+  pure
     [ sum
         . fmap
           ( (read :: String -> Int)
