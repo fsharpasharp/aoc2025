@@ -15,14 +15,14 @@ ranges = some $ do
   _ <- char '-'
   upper <- integer
   _ <- newline
-  return (Range lower upper)
+  pure (Range lower upper)
 
 fromContents :: Parser ([Range], [Integer])
 fromContents = do
   rs <- ranges
   _ <- space
   numbers <- some (integer <* optional newline)
-  return (rs, numbers)
+  pure (rs, numbers)
 
 mergeRanges :: [Range] -> [Range]
 mergeRanges =
@@ -44,4 +44,4 @@ day05 = do
   let distance (Range l u) = u - l + 1
   let b = sum . fmap distance . mergeRanges $ rs
 
-  return (a, b)
+  pure (a, b)

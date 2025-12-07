@@ -27,7 +27,7 @@ day01 = do
   rotations <- fmap parseRotation . lines <$> readFile "data/day01.in"
   let states = scanl rotate 50 rotations
 
-  return
+  pure
     ( length . filter (== 0) $ states,
       sum . zipWith passedZeros states $ rotations
     )

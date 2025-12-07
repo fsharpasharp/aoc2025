@@ -40,7 +40,7 @@ runAssertion x (AoCAssertion io expected) = do
     show x ++ if ok
       then " ✅"
       else " ❌ expected " ++ show expected ++ ", got " ++ show actual
-  return ok
+  pure ok
 
 main :: IO ()
 main = zipWithM_ runAssertion [1..] assertions

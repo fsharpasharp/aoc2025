@@ -15,7 +15,7 @@ ranges = some $ do
   upper <- integer
   _ <- optional . char $ ','
   _ <- many spaceChar
-  return (Range lower upper)
+  pure (Range lower upper)
 
 repeatingOnce :: Integer -> Bool
 repeatingOnce x = a == b
@@ -38,4 +38,4 @@ numsInRange (Range lower upper) = [lower .. upper]
 day02 :: IO [Integer]
 day02 = do
   rs <- parseOrDie ranges <$> readFile "data/day02.in"
-  return [sum . concatMap (filter f . numsInRange) $ rs | f <- [repeatingOnce, repeating]]
+  pure [sum . concatMap (filter f . numsInRange) $ rs | f <- [repeatingOnce, repeating]]
