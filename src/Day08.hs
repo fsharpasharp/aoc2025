@@ -53,30 +53,19 @@ unionFind = fmap concat . mapM go
     go (a, b, _) = do
       dMap <- get
       case (findParent a dMap, findParent b dMap) of
-        (Nothing, Nothing) -> do
-          let root = min a b
-          modify (M.insert a root)
-          modify (M.insert b root)
-          pure [(a, b)]
-        (Just aIndex, Just bIndex)
+        (aIndex, bIndex)
           | aIndex == bIndex -> pure []
           | otherwise -> do
-              modify (M.insert bIndex aIndex)
+              modify . M.insert bIndex $ aIndex
               pure [(a, b)]
-        (Just aIndex, _) -> do
-          modify (M.insert b aIndex)
-          pure [(a, b)]
-        (_, Just bIndex) -> do
-          modify (M.insert a bIndex)
-          pure [(a, b)]
 
 -- Consider path compression.
-findParent :: (Ord t) => t -> Map t t -> Maybe t
+findParent :: (Ord t) => t -> Map t t -> t
 findParent z m =
   case M.lookup z m of
-    Nothing -> Nothing
+    Nothing -> z
     Just next
-      | next == z -> Just z
+      | next == z -> z
       | otherwise -> findParent next m
 
 day08 :: IO (Int, Integer)
@@ -84,10 +73,11 @@ day08 = do
   ps <- parseOrDie points <$> readFile "data/day08.in"
   let idxPoints = zipWith (\x y -> IdxPoint {index = x, point = y}) [0 ..] ps
       ds = distances idxPoints
+      allIndices = fmap index idxPoints
       partial = execState (unionFind (take 1000 ds)) M.empty
 
   let mostFrequent = reverse . sort . fmap length . group . sort
-      a = product . take 3 . mostFrequent . fmap ((`findParent` partial) . fst) . M.toList $ partial
+      a = product . take 3 . mostFrequent . fmap (`findParent` partial) $ allIndices
 
   let full = evalState (unionFind (drop 1000 ds)) partial
   let lastConnected = last full
