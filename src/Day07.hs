@@ -1,8 +1,9 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Day07 (day07) where
 
-import Control.Monad.State.Strict (State, gets, modify', evalState)
+import Control.Monad.State.Strict (State, evalState, gets, modify')
 import Data.Array.IArray (Array, assocs, listArray, (!?))
 import Data.List (find)
 import Data.Map (Map)
@@ -24,9 +25,8 @@ start = fst . fromJust . find ((== 'S') . snd) . assocs
 laser :: Grid Char -> State (Map (Int, Int) Int) (Int, Int)
 laser g = fmap (+ 1) <$> go (start g)
   where
-    go p@(y, x) = do
-      res <- gets (M.lookup p)
-      case res of
+    go p@(y, x) =
+      gets (M.lookup p) >>= \case
         Just a -> pure (0, a)
         Nothing ->
           case g !? p of
