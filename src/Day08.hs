@@ -52,18 +52,15 @@ unionFind = fmap concat . mapM go
   where
     go (a, b, _) = do
       dMap <- get
-      let x = findParent a dMap
-          y = findParent b dMap
-      case (x, y) of
+      case (findParent a dMap, findParent b dMap) of
         (Nothing, Nothing) -> do
           let root = min a b
           modify (M.insert a root)
           modify (M.insert b root)
           pure [(a, b)]
-        (Just aIndex, Just bIndex) -> do
-          if aIndex == bIndex
-            then pure []
-            else do
+        (Just aIndex, Just bIndex)
+          | aIndex == bIndex -> pure []
+          | otherwise -> do
               modify (M.insert bIndex aIndex)
               pure [(a, b)]
         (Just aIndex, _) -> do
