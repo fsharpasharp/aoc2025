@@ -56,33 +56,28 @@ unionFind = fmap concat . mapM go
         (aIndex, bIndex)
           | aIndex == bIndex -> pure []
           | otherwise -> do
-              modify . M.insert bIndex $ aIndex
+              modify (M.insert bIndex aIndex)
               pure [(a, b)]
 
 -- Consider path compression.
 findParent :: (Ord t) => t -> Map t t -> t
-findParent z m =
-  case M.lookup z m of
-    Nothing -> z
-    Just next
-      | next == z -> z
-      | otherwise -> findParent next m
+findParent z m = maybe z (`findParent` m) (M.lookup z m)
 
 day08 :: IO (Int, Integer)
 day08 = do
   ps <- parseOrDie points <$> readFile "data/day08.in"
-  let idxPoints = zipWith (\x y -> IdxPoint {index = x, point = y}) [0 ..] ps
+  let connections = 1000
+      idxPoints = zipWith IdxPoint [0 ..] ps
       ds = distances idxPoints
       allIndices = fmap index idxPoints
-      partial = execState (unionFind (take 1000 ds)) M.empty
-
-  let mostFrequent = reverse . sort . fmap length . group . sort
+      partial = execState (unionFind (take connections ds)) M.empty
+      mostFrequent = reverse . sort . fmap length . group . sort
       a = product . take 3 . mostFrequent . fmap (`findParent` partial) $ allIndices
 
-  let full = evalState (unionFind (drop 1000 ds)) partial
-  let lastConnected = last full
-      indices = [\findee -> find (\x -> index x == findee) idxPoints] <*> [fst lastConnected, snd lastConnected]
-      xCoord = fmap ((\(Point z) -> head z) . point) . catMaybes
-      b = product . xCoord $ indices
+      full = evalState (unionFind (drop connections ds)) partial
+      (i1, i2) = last full
+      lastIndices  = fmap (\i -> find ((== i) . index) idxPoints) [i1, i2]
+      xCoord = fmap (head . (\(Point z) -> z) . point) . catMaybes
+      b = product . xCoord $ lastIndices
 
   return (a, b)
