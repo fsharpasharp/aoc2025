@@ -66,15 +66,15 @@ findParent z m = maybe z (`findParent` m) (M.lookup z m)
 day08 :: IO (Int, Integer)
 day08 = do
   ps <- parseOrDie points <$> readFile "data/day08.in"
-  let connections = 1000
-      idxPoints = zipWith IdxPoint [0 ..] ps
+  let idxPoints = zipWith IdxPoint [0 ..] ps
       ds = distances idxPoints
       allIndices = fmap index idxPoints
-      partial = execState (unionFind (take connections ds)) M.empty
+      (front, back) = splitAt 1000 ds
+      partial = execState (unionFind front) M.empty
       mostFrequent = reverse . sort . fmap length . group . sort
       a = product . take 3 . mostFrequent . fmap (`findParent` partial) $ allIndices
 
-      full = evalState (unionFind (drop connections ds)) partial
+      full = evalState (unionFind back) partial
       (i1, i2) = last full
       lastIndices  = fmap (\i -> find ((== i) . index) idxPoints) [i1, i2]
       xCoord = fmap (head . (\(Point z) -> z) . point) . catMaybes
