@@ -48,16 +48,16 @@ distances xs = sortOn (\(_, _, x) -> x) [(index a, index b, distance (point a) (
     distance (Point m) (Point n) = sum . fmap (^ 2) . zipWith (-) m $ n
 
 unionFind :: [(Integer, Integer, c)] -> StateT (Map Integer Integer) Identity [(Integer, Integer)]
-unionFind = fmap concat . mapM go
+unionFind = fmap catMaybes . mapM go
   where
     go (a, b, _) = do
       dMap <- get
       case (findParent a dMap, findParent b dMap) of
         (aIndex, bIndex)
-          | aIndex == bIndex -> pure []
+          | aIndex == bIndex -> pure Nothing
           | otherwise -> do
               modify (M.insert bIndex aIndex)
-              pure [(a, b)]
+              pure (Just (a, b))
 
 -- Consider path compression.
 findParent :: (Ord t) => t -> Map t t -> t
