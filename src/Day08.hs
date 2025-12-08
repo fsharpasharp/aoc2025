@@ -92,7 +92,7 @@ day08 = do
   let mostFrequent = reverse . sort . fmap length . group . sort
       a = product . take 3 . mostFrequent . fmap ((`findParent` partial) . fst) . M.toList $ partial
 
-  let full = evalState (unionFind ds) M.empty
+  let full = evalState (unionFind (drop 1000 ds)) partial
   let lastConnected = last full
       indices = [\findee -> find (\x -> index x == findee) idxPoints] <*> [fst lastConnected, snd lastConnected]
       xCoord = fmap ((\(Point z) -> head z) . point) . catMaybes
