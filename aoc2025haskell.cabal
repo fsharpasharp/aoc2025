@@ -13,6 +13,7 @@ common warnings
 library
     import:           warnings
     exposed-modules:  
+        Day09,
         Day08,
         Day07,
         Day06,
