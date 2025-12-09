@@ -44,9 +44,9 @@ boundaries [] = []
 boundaries (p : ps) = fmap tupleToLine . zipWith rectangle (p : ps) $ (ps ++ [p])
   where
     tupleToLine (xLow, xHigh, yLow, yHigh)
-          | xLow == xHigh = Vertical (Line xLow yLow yHigh)
-          | yLow == yHigh = Horizontal (Line yLow xLow xHigh)
-          | otherwise = error "Uh oh!"
+      | xLow == xHigh = Vertical (Line xLow yLow yHigh)
+      | yLow == yHigh = Horizontal (Line yLow xLow xHigh)
+      | otherwise = error "Uh oh!"
 
 intersectsRect :: (Foldable t) => t LineType -> Rectangle -> Bool
 intersectsRect boundary (minX, maxX, minY, maxY) = any go boundary
