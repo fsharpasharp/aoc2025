@@ -11,6 +11,7 @@ import Day05
 import Day06
 import Day07
 import Day08
+import Day09
 import Control.Monad (zipWithM_)
 
 data AoCAssertion where
@@ -30,7 +31,8 @@ assertions =
      AoCAssertion day05 (737,357485433193284),
      AoCAssertion day06 [6757749566978,10603075273949],
      AoCAssertion day07 (1600,8632253783011),
-     AoCAssertion day08 (102816,100011612)
+     AoCAssertion day08 (102816,100011612),
+     AoCAssertion day09 (4776487744, 1560299548)
   ]
 
 

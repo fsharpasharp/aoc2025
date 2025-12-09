@@ -63,6 +63,7 @@ unionFind = fmap catMaybes . mapM go
 findParent :: (Ord t) => t -> Map t t -> t
 findParent z m = maybe z (`findParent` m) (M.lookup z m)
 
+--- >>> day08
 day08 :: IO (Int, Integer)
 day08 = do
   ps <- parseOrDie points <$> readFile "data/day08.in"
@@ -80,4 +81,4 @@ day08 = do
       xCoord = fmap (head . (\(Point z) -> z) . point) . catMaybes
       b = product . xCoord $ lastIndices
 
-  return (a, b)
+  pure (a, b)
