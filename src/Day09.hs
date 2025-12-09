@@ -1,12 +1,12 @@
 module Day09 (day09) where
 
 import Control.Monad (void)
+import Data.List (tails)
 import Data.Text.IO (readFile)
 import Solution (Parser, integer, parseOrDie)
 import Text.Megaparsec (MonadParsec (eof), some, (<|>))
 import Text.Megaparsec.Char (char, newline)
 import Prelude hiding (readFile)
-import Data.List (tails)
 
 type Point = (Integer, Integer)
 
@@ -41,14 +41,12 @@ area (minX, maxX, minY, maxY) = (maxX - minX + 1) * (maxY - minY + 1)
 
 boundaries :: [Point] -> [LineType]
 boundaries [] = []
-boundaries (p : ps) = fmap tupleToLine . zip (p : ps) $ (ps ++ [p])
+boundaries (p : ps) = fmap tupleToLine . zipWith rectangle (p : ps) $ (ps ++ [p])
   where
-    tupleToLine (p1, p2)
-      | x_low == x_high = Vertical (Line x_low y_low y_high)
-      | y_low == y_high = Horizontal (Line y_low x_low x_high)
-      | otherwise = error "Uh oh!"
-      where
-        (x_low, x_high, y_low, y_high) = rectangle p1 p2
+    tupleToLine (xLow, xHigh, yLow, yHigh)
+          | xLow == xHigh = Vertical (Line xLow yLow yHigh)
+          | yLow == yHigh = Horizontal (Line yLow xLow xHigh)
+          | otherwise = error "Uh oh!"
 
 intersectsRect :: (Foldable t) => t LineType -> Rectangle -> Bool
 intersectsRect boundary (minX, maxX, minY, maxY) = any go boundary
