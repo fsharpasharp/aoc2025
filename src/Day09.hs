@@ -50,11 +50,11 @@ boundaries (p : ps) = fmap tupleToLine . zip (p : ps) $ (ps ++ [p])
       where
         (x_low, x_high, y_low, y_high) = rectangle p1 p2
 
-cutsRect :: (Foldable t) => t LineType -> Rectangle -> Bool
-cutsRect boundary (minX, maxX, minY, maxY) = any cuts boundary
+intersectsRect :: (Foldable t) => t LineType -> Rectangle -> Bool
+intersectsRect boundary (minX, maxX, minY, maxY) = any go boundary
   where
-    cuts (Vertical (Line x y1 y2)) = minX < x && x < maxX && y2 > minY && y1 < maxY
-    cuts (Horizontal (Line y x1 x2)) = minY < y && y < maxY && x2 > minX && x1 < maxX
+    go (Vertical (Line x y1 y2)) = minX < x && x < maxX && y2 > minY && y1 < maxY
+    go (Horizontal (Line y x1 x2)) = minY < y && y < maxY && x2 > minX && x1 < maxX
 
 day09 :: IO (Integer, Integer)
 day09 = do
@@ -65,5 +65,5 @@ day09 = do
 
   pure
     ( best rectangles,
-      best . filter (not . cutsRect boundary) $ rectangles
+      best . filter (not . intersectsRect boundary) $ rectangles
     )
