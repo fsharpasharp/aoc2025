@@ -13,6 +13,8 @@ common warnings
 library
     import:           warnings
     exposed-modules:  
+        Day11,
+        Day10,
         Day09,
         Day08,
         Day07,
@@ -28,6 +30,7 @@ library
     build-depends:    
         base ^>=4.18.3.0,
         megaparsec,
+        hmatrix,
         text,
         containers,
         array,
