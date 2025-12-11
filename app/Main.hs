@@ -12,6 +12,8 @@ import Day06
 import Day07
 import Day08
 import Day09
+import Day10
+import Day11
 import Control.Monad (zipWithM_)
 
 data AoCAssertion where
@@ -32,7 +34,9 @@ assertions =
      AoCAssertion day06 [6757749566978,10603075273949],
      AoCAssertion day07 (1600,8632253783011),
      AoCAssertion day08 (102816,100011612),
-     AoCAssertion day09 (4776487744, 1560299548)
+     AoCAssertion day09 (4776487744, 1560299548),
+     AoCAssertion day10 466,
+     AoCAssertion day11 (511,458618114529380)
   ]
 
 
@@ -48,8 +52,3 @@ runAssertion x (AoCAssertion io expected) = do
 
 main :: IO ()
 main = zipWithM_ runAssertion [1..] assertions
-
-
--- today = AoCAssertion day01 1
--- main :: IO ()
--- main = runAssertion 0 today
