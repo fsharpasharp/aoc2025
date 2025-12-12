@@ -7,9 +7,7 @@ module Day10 (day10) where
 import Data.Bits
 import Data.Functor
 import Data.List (subsequences)
-import qualified Data.Map as M
 import Data.Text.IO (readFile)
-import Debug.Trace
 import Solution (Parser, integer, parseOrDie)
 import Text.Megaparsec
 import Text.Megaparsec.Char
@@ -74,5 +72,4 @@ findLights (Row t bs _) = combos
 day10 :: IO Int
 day10 = do
   rows <- parseOrDie parseAll <$> readFile "data/day10.in"
-  print rows
   pure (sum . fmap findLights $ rows)
